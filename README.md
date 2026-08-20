@@ -118,7 +118,6 @@ Once the server is running, open your browser and navigate to `http://127.0.0.1:
 ## 📁 Project Structure
 
 ```text
-cracka-nids/
 ├── data/                  # NSL-KDD Datasets 
 ├── ml/                    # Data preprocessing and model training scripts
 ├── models/                # Serialized .pkl files (Encoders, Scalers, Models)
