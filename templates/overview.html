@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="page-title">Project Overview</h1>
+
+<div class="grid-2" style="margin-bottom: 40px;">
+  <div class="card-panel">
+    <h2 style="font-size: 1.2rem; margin-bottom: 12px; color: var(--accent-blue);">Objective</h2>
+    <p style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">
+      Enhancing network perimeter security by leveraging ensemble machine learning techniques on the NSL-KDD benchmark dataset to classify anomalies, prevent zero-day penetrations, and mitigate malicious network vectors in real-time.[cite: 6]
+    </p>
+  </div>
+
+  <div class="card-panel">
+    <h2 style="font-size: 1.2rem; margin-bottom: 12px; color: var(--accent-blue);">Scope</h2>
+    <ul style="color: var(--text-muted); padding-left: 20px; line-height: 1.8; font-size: 0.95rem;">
+      <li>Multi-class categorization: Normal, DoS, Probe, U2R, and R2L.[cite: 6]</li>
+      <li>Live packet extraction and header transformation via Scapy.[cite: 6]</li>
+      <li>Feature standardisation and persistent ML model inference.[cite: 6]</li>
+    </ul>
+  </div>
+</div>
+
+<div style="margin-bottom: 24px;">
+    <h2 style="font-size: 1.5rem; margin-bottom: 8px; color: white;">Core System Modules</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        The architecture of this Intrusion Detection System is divided into four distinct phases, from data preparation to user interaction.
+    </p>
+</div>
+
+<div class="grid-2">
+  <!-- Module 1 -->
+  <div class="card-panel">
+    <h3 style="font-size: 1.1rem; color: #38bdf8; margin-bottom: 10px;">1. Data Preprocessing</h3>
+    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
+      Processes the raw NSL-KDD dataset to ensure high-quality training data. It maps over 35 specific sub-attacks into 5 core categories (Normal, DoS, Probe, U2R, R2L). Categorical features (protocol, service, flag) are transformed using <code>LabelEncoder</code>, and the 41-feature array is normalized via <code>StandardScaler</code> for optimal model accuracy.
+    </p>
+  </div>
+
+  <!-- Module 2 -->
+  <div class="card-panel">
+    <h3 style="font-size: 1.1rem; color: #38bdf8; margin-bottom: 10px;">2. Model Training & Evaluation</h3>
+    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
+      Trains robust Machine Learning algorithms, specifically Random Forest and Decision Tree classifiers. It utilizes <code>class_weight='balanced'</code> to handle the severe underrepresentation of stealthy attacks like U2R and R2L. Performance is evaluated using accuracy scores and confusion matrices before serializing the models via <code>joblib</code>.
+    </p>
+  </div>
+
+  <!-- Module 3 -->
+  <div class="card-panel">
+    <h3 style="font-size: 1.1rem; color: #38bdf8; margin-bottom: 10px;">3. Backend & Flask API</h3>
+    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
+      Acts as the central execution engine of the project. Built on Python Flask, it provides RESTful API endpoints for manual form predictions and batch CSV processing. Additionally, it integrates the <code>Scapy</code> library to actively intercept and inspect real-world network packets in real-time.
+    </p>
+  </div>
+
+  <!-- Module 4 -->
+  <div class="card-panel">
+    <h3 style="font-size: 1.1rem; color: #38bdf8; margin-bottom: 10px;">4. Frontend Interface</h3>
+    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
+      A responsive, dark-themed web dashboard designed for cybersecurity monitoring. It seamlessly connects with the Flask backend via JavaScript and offers three primary tools: a manual threat analysis form, a drag-and-drop batch CSV inspector, and a dynamic real-time network traffic log.
+    </p>
+  </div>
+</div>
+{% endblock %}
