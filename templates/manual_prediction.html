@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="page-title">Prediction Page</h1>
+
+<div class="grid-2">
+  <!-- Input Form -->
+  <div class="card-panel">
+    <form id="prediction-form">
+      <div class="form-group">
+        <label>Duration</label>
+        <input type="number" id="duration" class="form-control" value="0" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Protocol</label>
+        <select id="protocol_type" class="form-control">
+          <option value="tcp">TCP</option>
+          <option value="udp">UDP</option>
+          <option value="icmp">ICMP</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Service</label>
+        <select id="service" class="form-control">
+          <option value="http">HTTP</option>
+          <option value="ftp">FTP</option>
+          <option value="smtp">SMTP</option>
+          <option value="ssh">SSH</option>
+          <option value="domain_u">DNS (domain_u)</option>
+          <option value="private">Private</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Flag</label>
+        <select id="flag" class="form-control">
+          <option value="SF">SF (Normal Syn/Fin)</option>
+          <option value="S0">S0 (Connection attempt seen, no reply)</option>
+          <option value="REJ">REJ (Connection rejected)</option>
+          <option value="RSTO">RSTO (Reset origin)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Src Bytes</label>
+        <input type="number" id="src_bytes" class="form-control" value="181" required>
+      </div>
+
+      <div class="form-group">
+        <label>Dst Bytes</label>
+        <input type="number" id="dst_bytes" class="form-control" value="5450" required>
+      </div>
+
+      <div class="form-group">
+        <label>Failed Logins</label>
+        <input type="number" id="num_failed_logins" class="form-control" value="0" required>
+      </div>
+
+      <button type="submit" class="btn-primary" id="analyze-btn">Analyze Traffic</button>
+    </form>
+  </div>
+
+  <!-- Resultboard -->
+  <div class="card-panel resultboard">
+    <div>
+      <h2 style="font-size: 1.25rem; font-weight: 600;">Resultboard</h2>
+      <p style="margin-top: 12px; color: var(--text-muted); font-size: 1rem;">
+        Traffic Status: <strong id="traffic-status-text" style="color: var(--text-main);">Analyzing...</strong>
+      </p>
+      <p style="color: var(--text-muted); font-size: 1rem; margin-top: 4px;">
+        Confidence: <strong id="confidence-text">--%</strong>
+      </p>
+    </div>
+
+    <div class="status-indicator-container">
+      <div class="status-orb" id="status-orb"></div>
+      <div class="status-labels" id="status-labels">
+        NORMAL<br><span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 400;">or</span><br>ALERT
+      </div>
+    </div>
+
+    <div id="prob-breakdown" style="font-size: 0.85rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 12px;">
+      <!-- Dynamic class probability breakdown will populate here -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/manual_predict.js') }}"></script>
+{% endblock %}

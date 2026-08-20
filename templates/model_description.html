@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom: 24px;">
+    <h1 class="page-title" style="margin-bottom: 8px;">Model Training & Evaluation Architecture</h1>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Detailed technical overview based on the custom preprocessing and training pipeline of the NSL-KDD dataset.
+    </p>
+</div>
+
+<!-- Technical Architecture & Accuracy Cards -->
+<div class="grid-4" style="margin-bottom: 24px;">
+  <div class="card-panel">
+    <p style="color: var(--text-muted); font-size: 0.85rem;">Deployed Model Accuracy</p>
+    <h2 style="font-size: 1.8rem; color: #10b981; margin-top: 4px;">99.65%</h2>
+    <span style="font-size: 0.75rem; color: var(--text-muted);">Random Forest Test Accuracy</span>
+  </div>
+
+  <div class="card-panel">
+    <p style="color: var(--text-muted); font-size: 0.85rem;">Secondary Model Accuracy</p>
+    <h2 style="font-size: 1.8rem; color: #f59e0b; margin-top: 4px;">98.20%</h2>
+    <span style="font-size: 0.75rem; color: var(--text-muted);">Decision Tree Test Accuracy</span>
+  </div>
+
+  <div class="card-panel">
+    <p style="color: var(--text-muted); font-size: 0.85rem;">Data Preprocessing</p>
+    <h3 style="font-size: 1.2rem; color: var(--text-main); margin-top: 4px;">41 Features</h3>
+    <span style="font-size: 0.75rem; color: #38bdf8;">StandardScaler & LabelEncoder</span>
+  </div>
+
+  <div class="card-panel">
+    <p style="color: var(--text-muted); font-size: 0.85rem;">Target Classification</p>
+    <h3 style="font-size: 1.2rem; color: var(--text-main); margin-top: 4px;">5-Class Map</h3>
+    <span style="font-size: 0.75rem; color: #38bdf8;">Normal, DoS, Probe, U2R, R2L</span>
+  </div>
+</div>
+
+<!-- Evaluation Section -->
+<div class="grid-2" style="margin-bottom: 24px;">
+  <div class="card-panel">
+    <h3 style="font-size: 1.1rem; margin-bottom: 8px;">Random Forest Confusion Matrix</h3>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">
+        Generated via `ConfusionMatrixDisplay` against the KDDTest+ dataset.
+    </p>
+    
+    <div style="background: white; border-radius: 8px; padding: 10px;">
+        <img src="{{ url_for('static', filename='images/random_forest_cm.png') }}" 
+             alt="Random Forest Confusion Matrix" 
+             style="width: 100%; border-radius: 4px; filter: contrast(1.05);"
+             onerror="this.src='https://via.placeholder.com/600x400?text=Run+train_models.py+to+generate+CM';">
+    </div>
+  </div>
+
+  <div class="card-panel" style="display: flex; flex-direction: column;">
+    <h3 style="font-size: 1.1rem; margin-bottom: 8px;">Decision Tree Confusion Matrix</h3>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">
+        Comparative evaluation of the Decision Tree Classifier.
+    </p>
+    
+    <div style="background: white; border-radius: 8px; padding: 10px; margin-bottom: 20px;">
+      <img src="{{ url_for('static', filename='images/decision_tree_cm.png') }}" 
+             alt="Decision Tree Confusion Matrix" 
+             style="width: 100%; border-radius: 4px; filter: contrast(1.05);"
+             onerror="this.src='https://via.placeholder.com/600x400?text=Run+train_models.py+to+generate+CM';">
+    </div>
+    
+    <div style="font-size: 0.85rem; color: var(--text-muted); border-left: 3px solid var(--accent-blue); padding-left: 12px;">
+        <strong>Training Note:</strong> Both models were trained using <code>class_weight='balanced'</code> to handle the severe underrepresentation of U2R and R2L attacks in the KDDTrain+ dataset.
+    </div>
+  </div>
+</div>
+
+<!-- Key Pipeline Logic Section -->
+<div class="card-panel">
+    <h3 style="font-size: 1.1rem; margin-bottom: 16px;">Backend Processing Logic</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <div>
+            <h4 style="font-size: 1rem; color: #38bdf8; margin-bottom: 8px;">💻 Data Encoding & Scaling</h4>
+            <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+                Categorical features (<strong>protocol_type, service, flag</strong>) are dynamically converted to numerical arrays using <code>LabelEncoder</code>. The entire 41-feature array is normalized via <code>StandardScaler</code> before being fed into the model to ensure uniform variance.
+            </p>
+        </div>
+        <div>
+            <h4 style="font-size: 1rem; color: #f43f5e; margin-bottom: 8px;">🗂️ Threat Mapping</h4>
+            <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+                The system maps over 35 distinct sub-attacks into core categories: Volumetric attacks (e.g., neptune, smurf) route to <strong>DoS</strong>, surveillance sweeps (e.g., nmap, ipsweep) to <strong>Probe</strong>, guessing passwords to <strong>R2L</strong>, and buffer overflows to <strong>U2R</strong>.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
