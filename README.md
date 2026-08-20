@@ -26,8 +26,7 @@ Follow these step-by-step instructions to get the project running on your local 
 
 ### Step 1: Clone the Repository
 ```bash
-git clone [https://github.com/yourusername/cracka-nids.git](https://github.com/yourusername/cracka-nids.git)
-cd cracka-nids
+git clone(https://github.com/CYBERTECH2887/NETWORK-INTRUSION-DETECTION-SYSTEM-FOR-BEGINNERS.git)
 
 ```
 
