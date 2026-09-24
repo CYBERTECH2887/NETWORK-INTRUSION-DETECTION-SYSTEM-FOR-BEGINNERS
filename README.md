@@ -1,134 +1,128 @@
-# NETWORK-INTRUSION-DETECTION-SYSTEM-FOR-BEGINNERS
-# 🛡️NIDS: AI-Powered Network Intrusion Detection System
+# 🛡️ CRACKA NIDS — AI-Powered Network Intrusion Detection System
 
-NIDS is a robust, Machine Learning-based Network Intrusion Detection System designed to monitor, classify, and mitigate cyber threats in real-time. Built using the NSL-KDD benchmark dataset, this system identifies complex anomalies and zero-day attacks that traditional firewalls often miss. 
-
-It features an interactive dark-themed web dashboard for manual inspections, batch CSV processing, and live network packet sniffing.
+CRACKA NIDS is a Machine Learning-based Network Intrusion Detection System built on the **NSL-KDD** benchmark dataset. It classifies network traffic into five categories — **Normal, DoS, Probe, U2R, and R2L** — using a trained Random Forest classifier, and ships with a full authenticated web dashboard for manual inspection, batch CSV analysis, and real-time packet sniffing.
 
 ---
 
 ## 🚀 Features
-* **Multi-Class Threat Detection:** Categorizes traffic into Normal, DoS, Probe, U2R, and R2L.
-* **Live Packet Sniffing:** Intercepts real-time network traffic using `Scapy`.
-* **Machine Learning Core:** Powered by Random Forest and Decision Tree classifiers.
-* **Interactive Dashboard:** Offers manual prediction forms, drag-and-drop CSV uploads, and global threat analytics.
-* **Completely Offline UI:** No external CSS/JS dependencies (fully independent architecture).
+
+* **Multi-Class Threat Detection** — Classifies traffic into Normal, DoS, Probe, U2R, and R2L.
+* **Live Packet Sniffing** — Captures real-time network traffic using `Scapy`.
+* **Batch CSV Analysis** — Upload a CSV of network records and get predictions for every row in one go.
+* **Manual Prediction** — Enter individual traffic parameters and get an instant NORMAL / ALERT verdict with a confidence score.
+* **Secure Authentication** — Session-based login & registration, with user accounts stored in SQLite.
+* **Per-User History Logs** — Every sniffing session is saved and viewable per user, with a one-click "Clear History" option.
+* **Model Insights** — Dedicated page showing accuracy, per-class precision/recall, and the confusion matrix.
+* **Dark / Light Theme** — Glassmorphic dashboard UI with a persistent theme toggle.
+* **Fully Offline Frontend** — No external CSS/JS CDN dependencies.
 
 ---
 
 ## 🛠️ Installation & Setup Guide
 
-Follow these step-by-step instructions to get the project running on your local machine.
-
 ### Prerequisites
-* Python 3.8 or higher installed.
-* Administrative / Root privileges (Strictly required for live network sniffing).
+* Python 3.8 or higher
+* Administrative / Root privileges (required for live packet sniffing)
+* **Windows users:** install [Npcap](https://npcap.com/) separately for `Scapy` to work
 
 ### Step 1: Clone the Repository
 ```bash
-git clone(https://github.com/CYBERTECH2887/NETWORK-INTRUSION-DETECTION-SYSTEM-FOR-BEGINNERS.git)
-
+git clone https://github.com/<your-username>/CRACKA-NIDS.git
+cd CRACKA-NIDS
 ```
 
 ### Step 2: Install Dependencies
-
-It is recommended to use a virtual environment. Install the required Python libraries using:
-
+It's recommended to use a virtual environment.
 ```bash
 pip install -r requirements.txt
-
 ```
 
-### Step 3: Train the Models (Initial Setup)
-
-Before running the server, you must train the machine learning models and generate the preprocessors.
-
+### Step 3: Train the Models
+This generates the `.pkl` files (model, scaler, encoders) and the confusion matrix image.
 ```bash
 cd ml
-python preprocess_data.py
+python preprocess.py
 python train_models.py
 cd ..
-
 ```
-
-*(This will generate `.pkl` files and confusion matrix images in the `models/` and `static/images/` folders).*
 
 ### Step 4: Start the Flask Server
-
-**Crucial Note:** To use the Live Packet Sniffing feature, you MUST run your terminal or IDE (like VS Code) as an **Administrator** (Windows) or use `sudo` (Linux/Mac).
-
 ```bash
 python app.py
-
 ```
+The server starts at `http://127.0.0.1:5000` and opens automatically in your browser.
 
-*The server will start on `http://127.0.0.1:5000`.*
+> **Default login:** on first run, an admin account is auto-created — `admin` / `admin123`. Change this before deploying anywhere public.
+
+**Live Packet Sniffing note:** run your terminal/IDE as **Administrator** (Windows) or with `sudo` (Linux/Mac) so Scapy is allowed to capture packets.
 
 ---
 
 ## 🖥️ Webpage Navigation & Usage Guide
 
-Once the server is running, open your browser and navigate to `http://127.0.0.1:5000`. Here is how to use each module of the CRACKA NIDS suite:
+### 1. Login / Register
+Create an account or sign in — every other page requires an active session.
 
-### 1. Project Overview (`/overview`)
+### 2. Project Overview (`/overview`)
+Landing page explaining the objective, scope, and the four core modules — Data Preprocessing, Model Training, Backend API, and Frontend Interface.
 
-* **What it is:** The landing page of the application.
-* **How to use:** Read through the objective, scope, and the 4 core modules (Data Preprocessing, Model Training, Backend API, Frontend Interface) to understand the system's architecture.
+### 3. Dashboard Analytics (`/dashboard`)
+High-level cards on the problem, global impact, and the four attack types, alongside illustrative charts (Line, Bar, Pie, Map).
 
-### 2. Dashboard Analytics (`/dashboard`)
+### 4. Manual Prediction (`/manual_prediction`)
+1. Fill in the traffic parameters (Duration, Protocol, Service, Flag, Bytes, Failed Logins).
+2. Click **Analyze Traffic**.
+3. The Resultboard updates instantly with NORMAL / ALERT, a confidence %, and a glowing status orb.
 
-* **What it is:** A visual representation of global cyber threats and the impact of the NIDS.
-* **How to use:** Review the static charts (Line, Bar, Doughnut, and GeoMap) to understand the distribution of network traffic and the severity of the 4 major attack types (DoS, Probe, U2R, R2L).
+### 5. Upload CSV / Live Sniffing (`/live_prediction`)
+**Batch CSV Analysis**
+1. Drag & drop (or browse) a `.csv` file formatted like the NSL-KDD feature set.
+2. Click **Run Batch Analysis**.
+3. Results populate the table below — Record ID, Protocol, Predicted Status, Confidence.
 
-### 3. Manual Prediction (`/manual_prediction`)
+**Live Network Traffic Sniffing**
+1. Click **▶️ Start Live Sniffing**.
+2. The app polls the backend roughly every 1.5 seconds and streams intercepted packets into the table in real time.
+3. Click **🛑 Stop Live Sniffing** to end the session — captured packets are saved into that session's history.
 
-* **What it is:** A tool for security analysts to manually input packet features and test the model's response.
-* **How to use:**
-1. Fill in the network parameters (Duration, Protocol, Service, Flag, Bytes, etc.).
-2. Click the **"Analyze Traffic"** button.
-3. The *Resultboard* on the right will instantly update, showing whether the traffic is "NORMAL" or an "ALERT" (Malicious), along with a confidence percentage and a glowing status orb.
+### 6. Model Architecture (`/model_description`)
+Technical breakdown of the deployed Random Forest model — test accuracy, the 41-feature preprocessing pipeline (LabelEncoder + StandardScaler), the full classification report, and the confusion matrix.
 
+### 7. History Logs (`/history_logs`)
+Every completed live-sniffing session, grouped by Session ID and scoped to the logged-in user, with a **Clear History** button to wipe your own logs.
 
+---
 
-### 4. Upload CSV / Live Sniffing (`/live_prediction`)
+## 📊 Model Performance
 
-* **What it is:** The core functional page for bulk analysis and real-time monitoring.
-* **Action A: Batch CSV Analysis**
-1. Drag and drop a `.csv` or `.txt` file containing network logs into the upload zone, or click "Browse Files".
-2. The UI will update to show the selected file with a "Remove File" option.
-3. Click **"Run Batch Analysis"**.
-4. The system will process the entire file and populate the table below with Record IDs, Protocols, Predicted Status, and Confidence scores. Red text indicates an attack.
+Random Forest classifier, evaluated on the KDDTest+ set (22,544 records):
 
+| Class  | Precision | Recall | F1-Score | Support |
+|--------|-----------|--------|----------|---------|
+| Normal | 0.66      | 0.97   | 0.78     | 9,853   |
+| DoS    | 0.96      | 0.78   | 0.86     | 7,460   |
+| Probe  | 0.85      | 0.68   | 0.76     | 2,421   |
+| U2R    | 0.60      | 0.09   | 0.16     | 67      |
+| R2L    | 0.81      | 0.01   | 0.02     | 2,743   |
 
-* **Action B: Live Network Traffic Sniffing**
-1. Scroll down to the "Live Network Traffic Sniffing" panel.
-2. Click the blue **"▶️ Start Live Sniffing"** button.
-3. The button will turn red ("🛑 Stop Live Sniffing"). The system will now query the backend every 3 seconds to fetch packets intercepted by your network card.
-4. Watch real-time packets populate the table dynamically. Click the button again to halt sniffing. *(Requires Admin rights)*.
-
-
-
-### 5. Model Architecture (`/model_description`)
-
-* **What it is:** A technical breakdown of the deployed Machine Learning models.
-* **How to use:** Review the test accuracy scores of the Random Forest and Decision Tree classifiers. Analyze the dynamically generated Confusion Matrices to see how well the model separates Normal traffic from Stealth attacks.
+**Overall test accuracy: 75.49%**
 
 ---
 
 ## 📁 Project Structure
 
 ```text
-├── data/                  # NSL-KDD Datasets 
-├── ml/                    # Data preprocessing and model training scripts
-├── models/                # Serialized .pkl files (Encoders, Scalers, Models)
-├── static/                # CSS, JS, and dynamically generated images
+├── data/                  # NSL-KDD datasets (KDDTrain+.csv, KDDTest+.csv)
+├── ml/                    # preprocess.py, train_models.py
+├── models/                # Serialized .pkl files (model, scaler, label encoders)
+├── static/                # CSS, JS, and images (charts + confusion matrix)
 ├── templates/             # HTML dashboard pages
-├── utils/                 # Scapy packet sniffing logic
+├── utils/                 # Scapy packet sniffing logic (packet_sniff.py)
 ├── app.py                 # Main Flask server
-└── requirements.txt       # Python dependencies
-
+├── requirements.txt       # Python dependencies
+└── nids_history.db        # SQLite database (auto-created on first run)
 ```
 
 ---
 
-**Developed with ❤️ for enhanced Network Security.**
+**Developed with ❤️ for enhanced Network Security — Team CRACKA.**
