@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- ========================================== -->
+<!-- BLOCK 1: Page Header                       -->
+<!-- ========================================== -->
+<h1 class="page-title">Manual Prediction (By Inputs)</h1>
+
+<div class="grid-2">
+  
+  <!-- ========================================== -->
+  <!-- BLOCK 2: Manual Input Form                 -->
+  <!-- ========================================== -->
+  <div class="card-panel">
+    <form id="prediction-form">
+      <div class="form-group">
+        <label>Duration</label>
+        <input type="number" id="duration" class="form-control" value="0" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Protocol</label>
+        <select id="protocol_type" class="form-control">
+          <option value="tcp">TCP</option>
+          <option value="udp">UDP</option>
+          <option value="icmp">ICMP</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Service</label>
+        <select id="service" class="form-control">
+          <option value="http">HTTP</option>
+          <option value="ftp">FTP</option>
+          <option value="smtp">SMTP</option>
+          <option value="ssh">SSH</option>
+          <option value="domain_u">DNS (domain_u)</option>
+          <option value="private">Private</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Flag</label>
+        <select id="flag" class="form-control">
+          <option value="SF">SF (Normal Syn/Fin)</option>
+          <option value="S0">S0 (Connection attempt seen, no reply)</option>
+          <option value="REJ">REJ (Connection rejected)</option>
+          <option value="RSTO">RSTO (Reset origin)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Src Bytes</label>
+        <input type="number" id="src_bytes" class="form-control" value="181" required>
+      </div>
+
+      <div class="form-group">
+        <label>Dst Bytes</label>
+        <input type="number" id="dst_bytes" class="form-control" value="5450" required>
+      </div>
+
+      <div class="form-group">
+        <label>Failed Logins</label>
+        <input type="number" id="num_failed_logins" class="form-control" value="0" required>
+      </div>
+
+      <button type="submit" class="btn-primary" id="analyze-btn">Analyze Traffic</button>
+    </form>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- BLOCK 3: Resultboard & Status Indicator    -->
+  <!-- ========================================== -->
+  <div class="card-panel resultboard">
+    <div>
+      <h2 style="font-size: 1.25rem; font-weight: 600;">Resultboard</h2>
+      <p style="margin-top: 12px; color: var(--text-muted); font-size: 1rem;">
+        Traffic Status: <strong id="traffic-status-text" style="color: var(--text-main);">Analyzing...</strong>
+      </p>
+      <p style="color: var(--text-muted); font-size: 1rem; margin-top: 4px;">
+        Confidence: <strong id="confidence-text">--%</strong>
+      </p>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- BLOCK 4: Custom Orb Animations (CSS)       -->
+    <!-- ========================================== -->
+    <style>
+      #status-orb {
+        width: 300px !important;
+        height: 300px !important;
+      }
+      
+      .status-orb.alert {
+        box-shadow: 0 0 80px rgba(239, 68, 68, 0.9), 0 0 120px rgba(239, 68, 68, 0.4) !important;
+        animation: intense-pulse-red 1.5s infinite !important;
+      }
+      
+      .status-orb.normal {
+        box-shadow: 0 0 80px rgba(34, 197, 94, 0.9), 0 0 120px rgba(34, 197, 94, 0.4) !important;
+        animation: intense-pulse-green 1.5s infinite !important;
+      }
+
+      @keyframes intense-pulse-red {
+        0% { box-shadow: 0 0 60px rgba(239, 68, 68, 0.8), 0 0 0 0 rgba(239, 68, 68, 0.6); }
+        50% { box-shadow: 0 0 120px rgba(239, 68, 68, 1), 0 0 0 40px rgba(239, 68, 68, 0); }
+        100% { box-shadow: 0 0 60px rgba(239, 68, 68, 0.8), 0 0 0 0 rgba(239, 68, 68, 0); }
+      }
+
+      @keyframes intense-pulse-green {
+        0% { box-shadow: 0 0 60px rgba(34, 197, 94, 0.8), 0 0 0 0 rgba(34, 197, 94, 0.6); }
+        50% { box-shadow: 0 0 120px rgba(34, 197, 94, 1), 0 0 0 40px rgba(34, 197, 94, 0); }
+        100% { box-shadow: 0 0 60px rgba(34, 197, 94, 0.8), 0 0 0 0 rgba(34, 197, 94, 0); }
+      }
+    </style>
+
+    <div class="status-indicator-container" style="margin-top: 40px; margin-bottom: 30px;">
+      <div class="status-orb" id="status-orb"></div>
+      <div class="status-labels" id="status-labels" style="margin-top: 24px;">
+        NORMAL<br><span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 400;">or</span><br>ALERT
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- ========================================== -->
+<!-- BLOCK 5: External Scripts                  -->
+<!-- ========================================== -->
+<script src="/static/js/manual_predict.js"></script>
+{% endblock %}
