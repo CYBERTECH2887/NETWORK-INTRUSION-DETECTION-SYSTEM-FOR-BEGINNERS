@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- ========================================== -->
+<!-- BLOCK 1: Page Header                       -->
+<!-- ========================================== -->
+<div style="margin-bottom: 24px;">
+    <h1 class="page-title" style="margin-bottom: 8px;">Model Training & Evaluation Architecture</h1>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Detailed technical overview based on the custom preprocessing and training pipeline of the NSL-KDD dataset.
+    </p>
+</div>
+
+<!-- ========================================== -->
+<!-- BLOCK 2: Dataset & Model Profile           -->
+<!-- ========================================== -->
+<div class="card-panel" style="margin-bottom: 24px;">
+    <h3 style="font-size: 1.1rem; margin-bottom: 16px;">Dataset & Model Profile</h3>
+    <div class="grid-4">
+        <div>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Algorithm Types</p>
+            <h4 style="font-size: 1rem; color: var(--text-main);">Random Forest</h4>
+        </div>
+        <div>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Dataset Name</p>
+            <h4 style="font-size: 1rem; color: var(--text-main);">NSL-KDD</h4>
+        </div>
+        <div>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Data Split Ratio</p>
+            <h4 style="font-size: 1rem; color: var(--text-main);">80:20 (Train/Test)</h4>
+        </div>
+        <div>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Test Set Size</p>
+            <h4 style="font-size: 1rem; color: var(--text-main);">22,544 Records</h4>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- BLOCK 3: Accuracy & Architecture Metrics   -->
+<!-- ========================================== -->
+<div class="grid-4" style="margin-bottom: 24px;">
+  <div class="card-panel">
+    <p style="color: var(--text-muted); font-size: 0.85rem;">Random Forest Accuracy</p>
+    <h2 style="font-size: 1.8rem; color: #10b981; margin-top: 4px;">75.49%</h2>
+    <span style="font-size: 0.75rem; color: var(--text-muted);">Deployed Primary Model</span>
+  </div>
+
+  <div class="card-panel">
+    <p style="color: var(--text-muted); font-size: 0.85rem;">Data Preprocessing</p>
+    <h3 style="font-size: 1.2rem; color: var(--text-main); margin-top: 4px;">41 Features</h3>
+    <span style="font-size: 0.75rem; color: #38bdf8;">StandardScaler & LabelEncoder</span>
+  </div>
+
+  <div class="card-panel">
+    <p style="color: var(--text-muted); font-size: 0.85rem;">Target Classification</p>
+    <h3 style="font-size: 1.2rem; color: var(--text-main); margin-top: 4px;">5-Class Map</h3>
+    <span style="font-size: 0.75rem; color: #38bdf8;">Normal, DoS, Probe, U2R, R2L</span>
+  </div>
+</div>
+<!-- ========================================== -->
+<!-- BLOCK 4: UML MODELS -->
+<!-- ========================================== -->
+<div class="flowchart-section">
+    <h2 class="overview-section-title">UML Models</h2>
+    <p class="overview-section-text">
+        The UML models describe the structural and behavioral design of CRACKA NIDS,
+        including user interaction, prediction processing, live packet sniffing,
+        system components and deployment architecture.
+    </p>
+    <div class="flowchart-container">
+        <img src="{{ url_for('static', filename='images/uml_models.png') }}"
+             alt="CRACKA NIDS UML Models"
+             class="working-flowchart">
+    </div>
+</div>
+<!-- ========================================== -->
+<!-- BLOCK 5: Classification Report Table       -->
+<!-- ========================================== -->
+<div class="card-panel" style="margin-bottom: 24px;">
+    <h3 style="font-size: 1.1rem; margin-bottom: 16px;">Random Forest Classification Report</h3>
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; text-align: left; border-collapse: collapse; font-size: 0.95rem;">
+            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+                <th style="padding: 10px;">Class</th>
+                <th style="padding: 10px;">Precision</th>
+                <th style="padding: 10px;">Recall</th>
+                <th style="padding: 10px;">F1-Score</th>
+                <th style="padding: 10px;">Support (Instances)</th>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 10px; color: #10b981; font-weight: bold;">Normal</td>
+                <td style="padding: 10px;">0.66</td>
+                <td style="padding: 10px;">0.97</td>
+                <td style="padding: 10px;">0.78</td>
+                <td style="padding: 10px;">9,853</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 10px; color: #ef4444; font-weight: bold;">DoS</td>
+                <td style="padding: 10px;">0.96</td>
+                <td style="padding: 10px;">0.78</td>
+                <td style="padding: 10px;">0.86</td>
+                <td style="padding: 10px;">7,460</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 10px; color: #f97316; font-weight: bold;">Probe</td>
+                <td style="padding: 10px;">0.85</td>
+                <td style="padding: 10px;">0.68</td>
+                <td style="padding: 10px;">0.76</td>
+                <td style="padding: 10px;">2,421</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 10px; color: #eab308; font-weight: bold;">U2R</td>
+                <td style="padding: 10px;">0.60</td>
+                <td style="padding: 10px;">0.09</td>
+                <td style="padding: 10px;">0.16</td>
+                <td style="padding: 10px;">67</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 10px; color: #8b5cf6; font-weight: bold;">R2L</td>
+                <td style="padding: 10px;">0.81</td>
+                <td style="padding: 10px;">0.01</td>
+                <td style="padding: 10px;">0.02</td>
+                <td style="padding: 10px;">2,743</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- BLOCK 6: Evaluation Visuals & Logic        -->
+<!-- ========================================== -->
+<div class="grid-2" style="margin-bottom: 24px;">
+  
+  <div class="card-panel">
+    <h3 style="font-size: 1.1rem; margin-bottom: 8px;">Random Forest Confusion Matrix</h3>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">
+        Generated via `ConfusionMatrixDisplay` against the KDDTest+ dataset.
+    </p>
+    
+    <div style="background: white; border-radius: 8px; padding: 10px;">
+        <img src="/static/images/random_forest_cm.png" 
+             alt="Random Forest Confusion Matrix" 
+             style="width: 100%; border-radius: 4px; filter: contrast(1.05);">
+    </div>
+  </div>
+
+  <div class="card-panel">
+    <h3 style="font-size: 1.1rem; margin-bottom: 16px;">Model & Backend Processing Logic</h3>
+    <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+        <div>
+            <h4 style="font-size: 1rem; color: #38bdf8; margin-bottom: 8px;">💻 Data Encoding & Scaling</h4>
+            <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+                Categorical features (<strong>protocol_type, service, flag</strong>) are dynamically converted to numerical arrays using <code>LabelEncoder</code>. The entire 41-feature array is normalized via <code>StandardScaler</code> before being fed into the model to ensure uniform variance.
+            </p>
+        </div>
+        <div>
+            <h4 style="font-size: 1rem; color: #f43f5e; margin-bottom: 8px;">🗂️ Threat Mapping</h4>
+            <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+                The system maps over 35 distinct sub-attacks into core categories: Volumetric attacks (e.g., neptune, smurf) route to <strong>DoS</strong>, surveillance sweeps (e.g., nmap, ipsweep) to <strong>Probe</strong>, guessing passwords to <strong>R2L</strong>, and buffer overflows to <strong>U2R</strong>.
+            </p>
+        </div>
+        <div>
+            <h4 style="font-size: 1rem; color: #10b981; margin-bottom: 8px;">⚙️ Model Working</h4>
+            <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+                The preprocessed data is fed into the trained <strong>Random Forest Classifier</strong>. The model processes the input through an ensemble of decision trees, aggregates their individual predictions, and uses majority voting to classify the network traffic as Normal or a specific threat category.
+            </p>
+        </div>
+        <div>
+            <h4 style="font-size: 1rem; color: #a855f7; margin-bottom: 8px;">📊 What the Confusion Matrix Tells Us</h4>
+            <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+                The Confusion Matrix visualizes the model's performance by comparing predicted attacks against actual attacks. It highlights exactly where the model excels (True Positives) and where it gets confused (False Positives/Negatives), which is especially useful for tracking how well it detects rare attacks like U2R.
+            </p>
+        </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

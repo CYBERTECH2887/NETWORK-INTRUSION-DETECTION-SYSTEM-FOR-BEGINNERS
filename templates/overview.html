@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- ========================================== -->
+<!-- BLOCK 1: PAGE TITLE -->
+<!-- ========================================== -->
+<h1 class="page-title">Project Overview</h1>
+<!-- ========================================== -->
+<!-- BLOCK 2: PROJECT INTRODUCTION -->
+<!-- ========================================== -->
+<div class="grid-2" style="margin-bottom:40px;">
+    <div class="card-panel">
+        <h2 class="overview-section-title">Project Objective</h2>
+        <p class="overview-section-text">
+            The objective of CRACKA NIDS is to develop a Network Intrusion Detection System
+            that uses Machine Learning to identify and classify network traffic. The system
+            uses the NSL-KDD dataset for model development and Scapy for live network packet
+            capture and analysis.
+        </p>
+    </div>
+    <div class="card-panel">
+        <h2 class="overview-section-title">Project Scope</h2>
+        <ul class="overview-section-list">
+            <li>NSL-KDD based network intrusion classification.</li>
+            <li>Random Forest based Machine Learning prediction.</li>
+            <li>Manual traffic prediction.</li>
+            <li>Batch CSV traffic analysis.</li>
+            <li>Live network packet prediction using Scapy.</li>
+            <li>MySQL based user and prediction history management.</li>
+        </ul>
+    </div>
+</div>
+<!-- ========================================== -->
+<!-- BLOCK 3: TECHNOLOGY STACK -->
+<!-- ========================================== -->
+<div class="overview-section">
+    <h2 class="overview-section-title">Technology Stack</h2>
+    <p class="overview-section-text">
+        CRACKA NIDS combines Machine Learning, Python web development, packet analysis
+        and database management to provide a complete intrusion detection workflow.
+    </p>
+    <div class="grid-2" style="margin-top:25px;">
+        <div class="card-panel">
+            <h3 class="overview-card-title">Python & Machine Learning</h3>
+            <p class="overview-card-text">
+                Python is used as the primary programming language. NumPy and pandas
+                are used for data processing, while scikit-learn is used for
+                preprocessing, model training and prediction.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">Flask Backend</h3>
+            <p class="overview-card-text">
+                Flask manages application routes, authentication, manual prediction,
+                batch prediction, live packet prediction and communication between
+                the frontend and Machine Learning model.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">Scapy</h3>
+            <p class="overview-card-text">
+                Scapy is used in the live prediction module to capture network packets,
+                extract packet information and construct the required features for
+                Machine Learning prediction.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">MySQL Database</h3>
+            <p class="overview-card-text">
+                MySQL is used to store user information and prediction history.
+                Packet prediction records are associated with the logged-in user
+                and can be viewed through the History Logs page.
+            </p>
+        </div>
+    </div>
+</div>
+<!-- ========================================== -->
+<!-- BLOCK 4: CORE SYSTEM MODULES -->
+<!-- ========================================== -->
+<div class="overview-section">
+    <h2 class="overview-section-title">Core System Modules</h2>
+    <p class="overview-section-text">
+        The system is divided into four major modules that together implement
+        the complete Network Intrusion Detection workflow.
+    </p>
+    <div class="grid-2" style="margin-top:25px;">
+        <div class="card-panel">
+            <h3 class="overview-card-title">1. Data Preprocessing</h3>
+            <p class="overview-card-text">
+                The NSL-KDD training and testing datasets are loaded and prepared
+                for Machine Learning. Attack names are grouped into five classes:
+                Normal, DoS, Probe, U2R and R2L. Categorical features including
+                protocol type, service and flag are encoded using LabelEncoder.
+                The numerical feature set is standardized using StandardScaler.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">2. Model Training</h3>
+            <p class="overview-card-text">
+                The preprocessed data is used to train a Random Forest classifier.
+                The trained model is evaluated using test data and the required
+                Machine Learning artifacts are saved for later prediction.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">3. Flask Backend</h3>
+            <p class="overview-card-text">
+                Flask provides the central application backend. It handles
+                authentication, page rendering, manual prediction, batch CSV
+                prediction, live packet prediction and history management.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">4. Frontend Interface</h3>
+            <p class="overview-card-text">
+                The frontend provides a web-based interface through which users
+                can access the dashboard, project overview, manual prediction,
+                live prediction, model description and prediction history.
+            </p>
+        </div>
+    </div>
+</div>
+<!-- ========================================== -->
+<!-- BLOCK 5: DATASET & ML MODEL -->
+<!-- ========================================== -->
+<div class="overview-section">
+    <h2 class="overview-section-title">Dataset & Machine Learning Model</h2>
+    <div class="grid-2" style="margin-top:25px;">
+        <div class="card-panel">
+            <h3 class="overview-card-title">NSL-KDD Dataset</h3>
+            <p class="overview-card-text">
+                The project uses the NSL-KDD dataset as the source of network
+                traffic records for Machine Learning. The dataset contains
+                network connection features and attack labels used to train
+                and evaluate the intrusion detection model.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">41 Feature Representation</h3>
+            <p class="overview-card-text">
+                Network records are represented using the NSL-KDD feature
+                structure. Categorical fields are encoded and the resulting
+                feature vector is scaled before being provided to the model.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">Random Forest</h3>
+            <p class="overview-card-text">
+                The current implementation uses Random Forest as the primary
+                classification model. The classifier predicts one of the
+                five supported traffic categories.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">Prediction Classes</h3>
+            <div class="overview-class-list">
+                <span>Normal</span>
+                <span>DoS</span>
+                <span>Probe</span>
+                <span>U2R</span>
+                <span>R2L</span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========================================== -->
+<!-- BLOCK 6: PREDICTION MODES -->
+<!-- ========================================== -->
+<div class="overview-section">
+    <h2 class="overview-section-title">Prediction Modes</h2>
+    <p class="overview-section-text">
+        The system provides three different methods for analyzing network traffic.
+    </p>
+    <div class="grid-2" style="margin-top:25px;">
+        <div class="card-panel">
+            <h3 class="overview-card-title">Manual Prediction</h3>
+            <p class="overview-card-text">
+                Users can enter selected network traffic values such as duration,
+                protocol type, service, flag, source bytes, destination bytes
+                and failed logins. The backend converts the input into the
+                required feature representation and performs prediction.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">Batch CSV Prediction</h3>
+            <p class="overview-card-text">
+                Users can upload a CSV file containing network traffic records.
+                The system processes the records and generates a prediction
+                and confidence value for each input record.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">Live Network Prediction</h3>
+            <p class="overview-card-text">
+                The live prediction module uses Scapy to capture network packets.
+                Packet information is extracted and converted into features before
+                being passed to the trained Random Forest model.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">Prediction History</h3>
+            <p class="overview-card-text">
+                Live prediction sessions can be saved as sessions in MySQL.
+                Users can view their previous prediction records through
+                the History Logs page.
+            </p>
+        </div>
+    </div>
+</div>
+<!-- ========================================== -->
+<!-- BLOCK 7: WORKING FLOWCHART -->
+<!-- ========================================== -->
+<div class="flowchart-section">
+    <h2 class="overview-section-title">Working Flowchart</h2>
+    <p class="overview-section-text">
+        This flowchart represents the complete working process of CRACKA NIDS,
+        starting from NSL-KDD data preprocessing and Random Forest model training
+        and continuing through Flask-based prediction and live Scapy packet analysis.
+    </p>
+    <div class="flowchart-container">
+        <img src="{{ url_for('static', filename='images/working_flowchart.png') }}"
+             alt="CRACKA NIDS Working Flowchart"
+             class="working-flowchart">
+    </div>
+</div>
+<!-- ========================================== -->
+<!-- BLOCK 8: DATA FLOW DIAGRAM -->
+<!-- ========================================== -->
+<div class="flowchart-section">
+    <h2 class="overview-section-title">Data Flow Diagram</h2>
+    <p class="overview-section-text">
+        The Data Flow Diagram shows how user requests, network packets,
+        Machine Learning processing, prediction results and database storage
+        interact within the CRACKA NIDS system.
+    </p>
+    <div class="flowchart-container">
+        <img src="{{ url_for('static', filename='images/data_flow_diagram.png') }}"
+             alt="CRACKA NIDS Data Flow Diagram"
+             class="working-flowchart">
+    </div>
+</div>
+<!-- ========================================== -->
+<!-- BLOCK 9: ATTACK CATEGORIES -->
+<!-- ========================================== -->
+<div class="overview-section">
+    <h2 class="overview-section-title">Attack Categories</h2>
+    <p class="overview-section-text">
+        The trained system uses five output categories for network traffic classification.
+    </p>
+    <div class="grid-2" style="margin-top:25px;">
+        <div class="card-panel">
+            <h3 class="overview-card-title">Normal</h3>
+            <p class="overview-card-text">
+                Represents legitimate network traffic that is classified as non-intrusive.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">DoS</h3>
+            <p class="overview-card-text">
+                Represents Denial of Service related attack traffic.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">Probe</h3>
+            <p class="overview-card-text">
+                Represents network probing and scanning related traffic.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">U2R</h3>
+            <p class="overview-card-text">
+                Represents the User-to-Root attack category.
+            </p>
+        </div>
+        <div class="card-panel">
+            <h3 class="overview-card-title">R2L</h3>
+            <p class="overview-card-text">
+                Represents the Remote-to-Local attack category.
+            </p>
+        </div>
+    </div>
+</div>
+<!-- ========================================== -->
+<!-- BLOCK 10: SYSTEM WORKFLOW SUMMARY -->
+<!-- ========================================== -->
+<div class="overview-section">
+    <h2 class="overview-section-title">System Workflow Summary</h2>
+    <div class="card-panel">
+        <ol class="overview-workflow-list">
+            <li>User registers or logs into the CRACKA NIDS application.</li>
+            <li>The user selects manual prediction, batch CSV analysis or live packet prediction.</li>
+            <li>The Flask backend receives and validates the request.</li>
+            <li>Input data is converted into the required feature representation.</li>
+            <li>The saved scaler and label encoders are used during preprocessing.</li>
+            <li>The Random Forest model performs the classification.</li>
+            <li>The system generates the predicted class and confidence value.</li>
+            <li>The result is displayed through the frontend interface.</li>
+            <li>Live prediction sessions can be saved in the MySQL packet history.</li>
+        </ol>
+    </div>
+</div>
+<!-- ========================================== -->
+<!-- BLOCK 11: PROJECT RESULT -->
+<!-- ========================================== -->
+<div class="overview-section">
+    <div class="card-panel project-result-card">
+        <h2 class="overview-section-title">Project Result</h2>
+        <p class="overview-section-text">
+            CRACKA NIDS provides a complete Machine Learning based network
+            intrusion detection workflow. It combines NSL-KDD based model
+            training, Random Forest classification, Flask web services,
+            Scapy-based live packet analysis and MySQL based history management
+            in a single web application.
+        </p>
+    </div>
+</div>
+{% endblock %}
