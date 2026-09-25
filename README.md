@@ -195,4 +195,4 @@ Random Forest classifier, evaluated on the KDDTest+ set (22,544 records):
 
 ---
 
-**Developed with ❤️ for enhanced Network Security by Md Sakir Jalal (Team CRACKA).**
+**Developed with ❤️ for enhanced Network Security by Team CRACKA.**
