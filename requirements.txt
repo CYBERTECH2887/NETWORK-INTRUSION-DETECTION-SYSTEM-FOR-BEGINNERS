@@ -1,0 +1,20 @@
+# Web Framework
+Flask
+
+# Machine Learning & Data Processing
+scikit-learn
+pandas
+numpy
+joblib
+
+#For Database
+mysql-connector-python
+
+# Data Visualization (Confusion Matrix)
+matplotlib
+
+# Network Packet Sniffing
+scapy
+
+# Note for Windows Users: 
+# You need to manually install Npcap from its official website for scapy to work on Windows.

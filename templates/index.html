@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRACKA NIDS ⚡</title>
+    <style>
+        :root {
+            --bg-dark: #09090b;
+            --primary: #8b5cf6; 
+            --primary-glow: rgba(139, 92, 246, 0.6);
+            --accent: #38bdf8;
+            --danger: #f43f5e;
+            --success: #10b981;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --glass-bg: rgba(24, 24, 27, 0.6);
+            --glass-border: rgba(139, 92, 246, 0.2);
+            --bg-header: rgba(9, 9, 11, 0.8);
+            --footer-bg: rgba(9, 9, 11, 0.95);
+            --terminal-bg: rgba(24, 24, 27, 0.8);
+            --terminal-text: #a3be8c;
+            --terminal-header: rgba(255, 255, 255, 0.05);
+            --mesh-color-1: rgba(139, 92, 246, 0.15);
+            --mesh-color-2: rgba(14, 165, 233, 0.15);
+        }
+
+        [data-theme="light"] {
+            --bg-dark: #fff7ed; /* Light orange tint */
+            --primary: #ea580c; /* Vibrant Orange */
+            --primary-glow: rgba(234, 88, 12, 0.6);
+            --accent: #4f46e5; /* Indigo */
+            --danger: #dc2626;
+            --success: #16a34a;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(234, 88, 12, 0.3);
+            --bg-header: rgba(255, 255, 255, 0.8);
+            --footer-bg: rgba(255, 237, 213, 0.95);
+            --terminal-bg: rgba(255, 255, 255, 0.9);
+            --terminal-text: #ea580c;
+            --terminal-header: rgba(0, 0, 0, 0.05);
+            --mesh-color-1: rgba(234, 88, 12, 0.15);
+            --mesh-color-2: rgba(79, 70, 229, 0.15);
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, var(--mesh-color-1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, var(--mesh-color-2) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        header {
+            position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%; background: var(--bg-header); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border); z-index: 100;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .logo span { color: var(--primary); }
+
+        .nav-controls { display: flex; align-items: center; }
+        .theme-toggle-container { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--text-muted); margin-right: 20px; }
+        .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background-color: rgba(150, 150, 150, 0.2); border: 1px solid var(--glass-border); transition: .3s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: var(--text-main); transition: .3s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); border-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(22px); background-color: white;}
+
+        .nav-buttons a { text-decoration: none; font-size: 0.95rem; font-weight: 600; padding: 10px 24px; border-radius: 8px; margin-left: 12px; transition: all 0.3s ease; }
+        .btn-login { color: var(--text-muted); }
+        .btn-login:hover { color: var(--primary); }
+        .btn-register { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; box-shadow: 0 0 15px var(--primary-glow); }
+        .btn-register:hover { box-shadow: 0 0 25px var(--primary-glow); transform: translateY(-2px); color: #fff; }
+
+        .hero { display: flex; align-items: center; justify-content: space-between; min-height: 85vh; padding: 0 5%; gap: 40px; }
+        .hero-text { flex: 1; }
+        .hero-tag { display: inline-block; padding: 6px 16px; background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-bottom: 24px; }
+        .hero h1 { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+        .hero h1 span { background: linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+        .hero p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 40px; max-width: 550px; }
+
+        .hero-visual { flex: 1; display: flex; justify-content: center; }
+        .terminal { width: 100%; max-width: 550px; background: var(--terminal-bg); border: 1px solid var(--glass-border); border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8); overflow: hidden; backdrop-filter: blur(10px); }
+        .terminal-header { background: var(--terminal-header); padding: 12px 16px; display: flex; gap: 8px; border-bottom: 1px solid var(--glass-border); }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.red { background: #ff5f56; } .dot.yellow { background: #ffbd2e; } .dot.green { background: #27c93f; }
+        .terminal-body { padding: 20px; font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; color: var(--terminal-text); height: 250px; display: flex; flex-direction: column; gap: 8px; }
+        .log-line { opacity: 0; animation: fade-in 0.1s forwards; }
+        .log-alert { color: var(--danger); font-weight: bold; }
+        .log-sys { color: var(--primary); }
+        @keyframes fade-in { to { opacity: 1; } }
+
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 50px; }
+        .features { padding: 80px 5%; background: rgba(0,0,0,0.05); }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 32px; transition: all 0.4s ease; position: relative; overflow: hidden; }
+        .feature-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); transition: all 0.5s ease; }
+        .feature-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .feature-card:hover::before { left: 100%; }
+        .icon-box { width: 50px; height: 50px; background: var(--mesh-color-1); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; color: var(--primary); }
+
+        .tech-stack { padding: 60px 5%; text-align: center; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+        .tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 30px; }
+        .tag { padding: 8px 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 30px; color: var(--text-muted); font-weight: 600; transition: 0.3s; }
+        .tag:hover { color: var(--text-main); border-color: var(--primary); box-shadow: 0 0 15px var(--mesh-color-1); }
+        [data-theme="light"] .tag { background: rgba(0, 0, 0, 0.05); }
+
+        footer { padding: 60px 5% 30px; background: var(--footer-bg); }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { color: var(--text-muted); margin-top: 15px; max-width: 300px; }
+        .footer-col h4 { margin-bottom: 20px; font-size: 1.1rem; }
+        .footer-col a { display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 12px; transition: 0.2s; }
+        .footer-col a:hover { color: var(--primary); }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid var(--glass-border); color: var(--text-muted); font-size: 0.9rem; }
+
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 60px; }
+            .hero h1 { font-size: 2.8rem; }
+            .hero p { margin: 0 auto 30px; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .nav-controls { flex-direction: column; gap: 15px; }
+            header { flex-direction: column; gap: 20px; }
+            .theme-toggle-container { margin-right: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-mesh"></div>
+    <header>
+        <a href="/" class="logo">🛡 CRACKA <span>NIDS</span></a>
+        <div class="nav-controls">
+            <div class="theme-toggle-container">
+                <span style="font-size: 1.2rem;">Dark</span>
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span style="font-size: 1.2rem;">Light</span>
+            </div>
+            <div class="nav-buttons">
+                <a href="/login" class="btn-login">Log In</a>
+                <a href="/register" class="btn-register">Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-text">
+            <div class="hero-tag">● SYSTEM ONLINE v2.0</div>
+            <h1>Defend Your Network at <span>Wire Speed.</span></h1>
+            <p>An advanced Machine Learning Intrusion Detection System. Detect DoS, Probe, U2R, and R2L anomalies in real-time with continuous Scapy packet analysis.</p>
+            <div>
+                <a href="/register" class="btn-register" style="padding: 14px 32px; font-size: 1.1rem; display: inline-block; text-decoration: none; border-radius: 8px;">Initialize Dashboard ⚡</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                    <span style="margin-left: 10px; font-size: 0.8rem; color: #666; font-family: sans-serif;">cracka_sniff.py — root@nids</span>
+                </div>
+                <div class="terminal-body" id="term-logs"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2 class="section-title">Core Capabilities</h2>
+        <div class="grid-3">
+            <div class="feature-card">
+                <div class="icon-box">🧠</div>
+                <h3>Random Forest Engine</h3>
+                <p style="color: var(--text-muted);">Trained on the robust NSL-KDD dataset using 41-feature scaling to accurately classify 5 core threat vectors.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box">📡</div>
+                <h3>Live Packet Sniffing</h3>
+                <p style="color: var(--text-muted);">Intercepts raw TCP/UDP/ICMP packets via Scapy, reconstructing session parameters for sub-second threat predictions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box">🗂️</div>
+                <h3>Batch CSV Processing</h3>
+                <p style="color: var(--text-muted);">Upload enterprise-scale traffic logs. Our automated pipeline standardizes, encodes, and scores thousands of packets instantly.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="tech-stack">
+        <h2 style="font-size: 1.5rem; color: var(--text-muted);">Powered By Industry Standard Technologies</h2>
+        <div class="tags">
+            <div class="tag">Python 3</div>
+            <div class="tag">Scikit-Learn</div>
+            <div class="tag">Flask Framework</div>
+            <div class="tag">Scapy</div>
+            <div class="tag">Pandas & NumPy</div>
+            <div class="tag">MySQL</div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="/" class="logo">🛡️ CRACKA <span>NIDS</span></a>
+                <p>Next-generation network security. Bridging the gap between data science and real-time packet analysis.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Platform Modules</h4>
+                <a href="/login">Live Sniffing</a>
+                <a href="/login">Manual Testing</a>
+                <a href="/login">Batch Analysis</a>
+                <a href="/login">Threat History</a>
+            </div>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <a href="#">Architecture Model</a>
+                <a href="#">NSL-KDD Documentation</a>
+                <a href="#">System Repository</a>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2026 CRACKA NIDS | Built for Advanced Network Defense.</div>
+    </footer>
+
+    <script>
+        const logs = [
+            "<span class='log-sys'>[SYS]</span> Initializing Scapy interface eth0...",
+            "<span class='log-sys'>[SYS]</span> Loading RF_Model_v1.pkl [OK]",
+            "<span class='log-sys'>[SYS]</span> Loading LabelEncoders [OK]",
+            "[INFO] Capturing live packets on port 80/443...",
+            "[TRAFFIC] src: 192.168.1.105 -> dst: 104.21.3.4 | Protocol: TCP | Pred: NORMAL",
+            "[TRAFFIC] src: 192.168.1.105 -> dst: 142.250.190.46 | Protocol: UDP | Pred: NORMAL",
+            "<span class='log-alert'>[ALERT] HIGH RATE TCP SYN FLOOD DETECTED!</span>",
+            "<span class='log-alert'>[ALERT] src: 45.33.32.156 -> dst: 192.168.1.10 | Pred: DoS (neptune)</span>",
+            "<span class='log-alert'>[ALERT] Confidence: 98.4% | Action: LOGGED</span>",
+            "[INFO] Resuming standard traffic monitoring..."
+        ];
+
+        const termBody = document.getElementById('term-logs');
+        let index = 0;
+        function typeLog() {
+            if(index < logs.length) {
+                const p = document.createElement('div');
+                p.className = 'log-line';
+                p.innerHTML = logs[index];
+                termBody.appendChild(p);
+                index++;
+                setTimeout(typeLog, Math.random() * 800 + 400); 
+            } else {
+                setTimeout(() => { termBody.innerHTML = ''; index = 0; typeLog(); }, 3000); 
+            }
+        }
+        setTimeout(typeLog, 1000);
+    </script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
