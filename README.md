@@ -1,198 +1,147 @@
-# 🛡️ CRACKA NIDS — AI-Powered Network Intrusion Detection System
+```markdown
+# 🛡️ CRACKA NIDS ⚡
+**Advanced Network Intrusion Detection System**
 
-CRACKA NIDS is a Machine Learning-based Network Intrusion Detection System built on the **NSL-KDD** benchmark dataset. It classifies network traffic into five categories — **Normal, DoS, Probe, U2R, and R2L** — using a trained Random Forest classifier, and ships with a full authenticated web dashboard for manual inspection, batch CSV analysis, and real-time packet sniffing.
-
----
-
-## 🚀 Features
-
-* **Multi-Class Threat Detection** — Classifies traffic into Normal, DoS, Probe, U2R, and R2L.
-
-
-* **Live Packet Sniffing** — Captures real-time network traffic using `Scapy`.
-
-
-* **Batch CSV Analysis** — Upload a CSV of network records and get predictions for every row in one go.
-
-
-* **Manual Prediction** — Enter individual traffic parameters and get an instant NORMAL / ALERT verdict with a confidence score.
-
-
-* **Secure Authentication** — Session-based login & registration, with user accounts and prediction histories safely stored in a **MySQL** database.
-
-
-* **Per-User History Logs** — Every sniffing session is saved and viewable per user, with a one-click "Clear History" option.
-
-
-* **Model Insights** — Dedicated page showing accuracy, per-class precision/recall, and the confusion matrix.
-
-
-* **Dark / Light Theme** — Glassmorphic dashboard UI with a persistent theme toggle.
-
-
-* **Fully Offline Frontend** — No external CSS/JS CDN dependencies.
+CRACKA NIDS is a modern, machine learning-powered web application designed to detect and classify network intrusions in real-time. By bridging the gap between data science and network security, the system utilizes a trained Random Forest model to analyze network traffic and identify anomalies such as DoS, Probe, U2R, and R2L attacks at wire speed.
 
 ---
 
-## 🛠️ Installation & Setup Guide
+## ✨ Key Features
 
-### Prerequisites
+* **🧠 Machine Learning Engine:** Powered by a Random Forest classifier trained on the NSL-KDD dataset using a 41-feature extraction pipeline (StandardScaler & LabelEncoder).
+* **📡 Live Packet Sniffing:** Intercepts live TCP/UDP/ICMP packets via `scapy`, extracts session parameters dynamically, and provides sub-second threat predictions.
+* **🗂️ Batch CSV Processing:** Upload enterprise-scale traffic logs to automatically parse, standardize, encode, and score thousands of packets instantly.
+* **⌨️ Manual Prediction Interface:** Input raw traffic metrics via a structured form to test the model's accuracy on the fly.
+* **🔊 Dynamic Audio-Visual Alerts:** Features pulsing status orbs and triggers an MP3 audio beep whenever an active anomaly/threat is detected.
+* **🔐 Secure Authentication:** Includes user registration, login, and a "Forgot Password" flow with industry-standard Werkzeug password hashing.
+* **💾 History Management:** Securely logs live prediction sessions, packet metrics, timestamps, and threat levels into a MySQL database.
+* **🌗 Modern UI/UX:** Responsive Glassmorphism design featuring seamless Dark (Deep Violet/Cyber Blue) and Light (Vibrant Orange/Indigo) theme toggling with `localStorage` persistence.
 
-* Python 3.8 or higher
-* **MySQL Server** (running locally or remotely)
+---
 
+## 🛠️ Technology Stack
 
-* Administrative / Root privileges (required for live packet sniffing)
-* **Windows users:** install [Npcap](https://npcap.com/?utm_source=gemini) separately for `Scapy` to work
+* **Backend:** Python 3, Flask, Werkzeug (Security)
+* **Machine Learning:** Scikit-Learn, Pandas, NumPy, Joblib
+* **Network Analysis:** Scapy (Requires Npcap on Windows)
+* **Database:** MySQL, `mysql-connector-python`
+* **Frontend:** HTML5, CSS3 (Glassmorphism), Vanilla JavaScript, Jinja2
 
+---
 
+## ⚙️ Prerequisites
 
-### Step 1: Clone the Repository
+Before you begin, ensure you have the following installed on your machine:
+1. **Python 3.8+**
+2. **MySQL Server** (Running locally on port 3306)
+3. **Npcap** (Required for Windows users to allow `scapy` to sniff packets. Download from [nmap.org/npcap](https://nmap.org/npcap/))
 
+---
+
+## 🚀 Installation & Setup
+
+**1. Clone the repository**
 ```bash
-git clone https://github.com/<your-username>/CRACKA-NIDS.git
-cd CRACKA-NIDS
+git clone [https://github.com/yourusername/cracka-nids.git](https://github.com/yourusername/cracka-nids.git)
+cd cracka-nids
 
 ```
 
-### Step 2: Install Dependencies
-
-It's recommended to use a virtual environment.
+**2. Install dependencies**
 
 ```bash
 pip install -r requirements.txt
 
 ```
 
-### Step 3: Initialize the MySQL Database
-
-Ensure your MySQL server is running. Update the `DB_CONFIG` credentials in `create_db.py` if your local setup uses a different username or password, then run the initialization script to create the `nids_database` and required tables:
+**3. Configure the Database**
+Ensure your local MySQL server is running. If your MySQL root password is not `mysql`, update the `DB_CONFIG` dictionary in `create_db_2.py`.
+Initialize the database, create tables, and generate the default admin account:
 
 ```bash
-python create_db.py
+python create_db_2.py
 
 ```
 
-### Step 4: Train the Models
+*(Default Admin Credentials - Username: `admin`, Password: `admin123`)*
 
-This processes the dataset, standardizes the features, and generates the `.pkl` files (model, scaler, encoders) alongside the confusion matrix image.
+**4. Preprocess Data & Train the Model**
+Ensure your `KDDTest+.csv` and `KDDTrain+.csv` datasets are placed in the `data/` directory.
 
 ```bash
-python ml/preprocess.py
-python ml/train_models.py
+python preprocess.py
+python train_models.py
 
 ```
 
-### Step 5: Start the Flask Server
+*This will generate the required `.pkl` files (Random Forest model, Scaler, and Encoders) inside the `models/` directory.*
+
+**5. Start the Application**
 
 ```bash
 python app.py
 
 ```
 
-The server starts at `[http://127.0.0.1:5000](http://127.0.0.1:5000)` and opens automatically in your browser.
-
-> **Default login:** On the first database initialization, an admin account is auto-created — `admin` / `admin123`. Change this before deploying anywhere public.
-> 
-> 
-
-**Live Packet Sniffing note:** Run your terminal/IDE as **Administrator** (Windows) or with `sudo` (Linux/Mac) so `Scapy` is allowed to capture packets.
+*The Flask server will start, and a new browser tab will automatically open to `http://127.0.0.1:5000/`.*
 
 ---
 
-## 🖥️ Webpage Navigation & Usage Guide
-
-### 1. Login / Register (`/login`, `/register`)
-
-Create an account or sign in — every other page requires an active session.
-
-### 2. Project Overview (`/overview`)
-
-Landing page explaining the objective, scope, and the four core modules — Data Preprocessing, Model Training, Backend API, and Frontend Interface.
-
-### 3. Dashboard Analytics (`/dashboard`)
-
-High-level cards on the problem, global impact, and the four attack types, alongside illustrative charts (Line, Bar, Pie, Map) and a working flowchart.
-
-### 4. Manual Prediction (`/manual_prediction`)
-
-1. Fill in the traffic parameters (Duration, Protocol, Service, Flag, Bytes, Failed Logins).
-
-
-2. Click **Analyze Traffic**.
-
-
-3. The Resultboard updates instantly with NORMAL / ALERT, a confidence %, and a glowing status orb.
-
-
-
-### 5. Upload CSV / Live Sniffing (`/live_prediction`)
-
-**Batch CSV Analysis**
-
-1. Drag & drop (or browse) a `.csv` file formatted like the NSL-KDD feature set.
-
-
-2. Click **Run Batch Analysis**.
-
-
-3. Results populate the table below — Record ID, Protocol, Predicted Status, Confidence.
-
-
-
-**Live Network Traffic Sniffing**
-
-1. Click **▶️ Start Live Sniffing**.
-
-
-2. The app polls the backend roughly every 1.5 seconds and streams intercepted packets into the table in real time.
-
-
-3. Click **🛑 Stop Live Sniffing** to end the session — captured packets are saved directly to your MySQL database session history.
-
-
-
-### 6. Model Architecture (`/model_description`)
-
-Technical breakdown of the deployed Random Forest model — 75.49% test accuracy, the 41-feature preprocessing pipeline (LabelEncoder + StandardScaler), UML models, the full classification report, and the confusion matrix.
-
-### 7. History Logs (`/history_logs`)
-
-Every completed live-sniffing session, grouped by Session ID and scoped to the logged-in user, with a **Clear History** button to wipe your own logs from the database.
-
----
-
-## 📊 Model Performance
-
-Random Forest classifier, evaluated on the KDDTest+ set (22,544 records):
-
-| Class | Precision | Recall | F1-Score | Support |
-| --- | --- | --- | --- | --- |
-| Normal | 0.66 | 0.97 | 0.78 | 9,853 |
-| DoS | 0.96 | 0.78 | 0.86 | 7,460 |
-| Probe | 0.85 | 0.68 | 0.76 | 2,421 |
-| U2R | 0.60 | 0.09 | 0.16 | 67 |
-| R2L | 0.81 | 0.01 | 0.02 | 2,743 |
-
-**Overall test accuracy: 75.49%**
-
----
-
-## 📁 Project Structure
+## 📂 Project Structure
 
 ```text
-├── data/                  # NSL-KDD datasets (KDDTrain+.csv, KDDTest+.csv)
-├── ml/                    # preprocess.py, train_models.py
-├── models/                # Serialized .pkl files (model, scaler, label encoders)
-├── static/                # CSS, JS, and images (charts + confusion matrix)
-├── templates/             # HTML dashboard pages
-├── utils/                 # Scapy packet sniffing logic (packet_sniff.py)
-├── app.py                 # Main Flask server
-├── create_db.py           # MySQL database and table initialization script
-└── requirements.txt       # Python dependencies
+CRACKA_NIDS/
+│
+├── app.py                   # Main Flask application and routing engine
+├── create_db_2.py           # MySQL database initialization and schema setup
+├── preprocess.py            # NSL-KDD dataset cleaning, encoding, and scaling script
+├── train_models.py          # Random Forest training and evaluation script
+├── requirements.txt         # Project dependencies
+│
+├── data/                    # Directory for raw datasets and numpy arrays
+│   ├── KDDTrain+.csv
+│   └── KDDTest+.csv
+│
+├── models/                  # Directory for saved ML artifacts
+│   ├── random_forest.pkl
+│   ├── scaler.pkl
+│   └── label_encoders.pkl
+│
+├── utils/
+│   └── packet_sniff_2.py    # Scapy live packet capture and 41-feature extraction logic
+│
+├── static/
+│   ├── css/
+│   │   └── style.css        # Main glassmorphism stylesheet with theme variables
+│   ├── js/
+│   │   ├── main.js          # Theme toggling and local storage logic
+│   │   └── manual_predict.js# Manual prediction AJAX logic
+│   ├── images/              # Evaluation plots and architecture diagrams
+│   └── audio/
+│       └── beep.mp3         # Threat detection alert sound
+│
+└── templates/               # Jinja2 HTML templates
+    ├── base.html            # Base layout with sidebar and navbar
+    ├── index.html           # Advanced landing page with terminal animation
+    ├── login.html           # Secure login portal
+    ├── register.html        # Account creation portal
+    ├── forgot_password.html # Password reset flow
+    ├── dashboard.html       # Analytics and charts
+    ├── overview.html        # Project documentation and architecture
+    ├── live_prediction.html # CSV batch upload and live Scapy sniffing UI
+    ├── manual_prediction.html # Form-based traffic testing UI
+    ├── model_description.html # ML evaluation metrics and matrices
+    └── history_logs.html    # User-specific prediction history tables
 
 ```
 
 ---
 
-**Developed with ❤️ for enhanced Network Security by Team CRACKA.**
+## ⚠️ Important Notes
+
+* **Administrator Privileges:** Live packet sniffing with `scapy` requires elevated privileges. On Windows, ensure you run your command prompt or IDE as **Administrator**. On Linux/macOS, run the app using `sudo python app.py`.
+* **Testing Offline:** For demonstration purposes without internet traffic, use the **Manual Prediction** or **Batch CSV** modules to verify model accuracy.
+
+```
+
+```
