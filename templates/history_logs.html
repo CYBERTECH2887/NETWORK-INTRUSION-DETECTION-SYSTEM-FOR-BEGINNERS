@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}History logs - CRACKA NIDS{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1 class="page-title">History logs</h1><p class="page-sub">Your saved live sessions, newest first (latest 1000 packets).</p></div>
+  {% if logs %}<button id="clear-history-btn" class="btn btn-danger">Clear history</button>{% endif %}
+</div>
+{% if error %}<div class="notice error">{{ error }}</div>{% endif %}
+
+<div class="card">
+  {% if logs %}
+  <div class="card-head" style="gap:10px">
+    <input type="search" id="log-search" class="form-control" style="max-width:260px" placeholder="Search IP, protocol or class" aria-label="Search logs">
+    <select id="log-filter" class="form-control" style="max-width:190px" aria-label="Filter by result">
+      <option value="">All results</option><option value="threat">Threats only</option><option value="Normal">Normal only</option>
+      {% for c in ['DoS', 'Probe', 'U2R', 'R2L'] %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+    </select>
+    <span class="muted" id="log-count" style="margin-left:auto;font-size:.85rem"></span>
+  </div>
+  {% endif %}
+  <div class="table-wrap" style="max-height:620px"><table class="data-table" id="log-table">
+    <thead><tr><th>Session</th><th>Packet</th><th>IP address</th><th>Protocol</th><th>Prediction</th><th>Confidence</th><th>Date</th><th>Time</th></tr></thead>
+    <tbody>
+    {% for row in logs %}
+      <tr class="{{ 'alert-row' if row.prediction != 'Normal' }}" data-class="{{ row.prediction }}">
+        <td>#{{ row.session_id }}</td><td>{{ row.packet_id }}</td><td class="mono">{{ row.ip_address }}</td><td>{{ row.protocol }}</td>
+        <td><span class="chip" data-class="{{ row.prediction }}">{{ row.prediction }}</span></td><td>{{ row.confidence }}</td><td>{{ row.date }}</td><td>{{ row.time }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="8"><div class="empty"><strong>No history yet</strong>Run a live sniffing session and press Stop and save to see it here.</div></td></tr>
+    {% endfor %}
+    </tbody></table></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  const clearBtn = document.getElementById('clear-history-btn');
+  if (clearBtn) clearBtn.addEventListener('click', async () => {
+    if (!confirm('Delete ALL your history logs? This cannot be undone.')) return;
+    clearBtn.disabled = true; clearBtn.textContent = 'Clearing...';
+    try {
+      const { ok, data } = await api('/api/clear_history', { method: 'POST' });
+      if (ok) location.reload(); else { toast(data.error || 'Could not clear history.', 'error'); clearBtn.disabled = false; clearBtn.textContent = 'Clear history'; }
+    } catch (e) { clearBtn.disabled = false; clearBtn.textContent = 'Clear history'; }
+  });
+
+  const search = document.getElementById('log-search'), filter = document.getElementById('log-filter'), countEl = document.getElementById('log-count');
+  function applyFilter() {
+    const q = search.value.trim().toLowerCase(), f = filter.value; let shown = 0;
+    document.querySelectorAll('#log-table tbody tr[data-class]').forEach(tr => {
+      const cls = tr.dataset.class;
+      const okFilter = !f || (f === 'threat' ? cls !== 'Normal' : cls === f);
+      const okText = !q || tr.textContent.toLowerCase().includes(q);
+      tr.hidden = !(okFilter && okText); if (!tr.hidden) shown++;
+    });
+    countEl.textContent = `${shown} shown`;
+  }
+  if (search) { search.addEventListener('input', applyFilter); filter.addEventListener('change', applyFilter); applyFilter(); }
+</script>
+{% endblock %}

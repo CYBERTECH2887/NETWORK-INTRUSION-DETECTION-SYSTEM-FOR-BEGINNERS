@@ -1,0 +1,78 @@
+{% from '_icons.html' import icon %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}CRACKA NIDS{% endblock %}</title>
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||'dark'}catch(e){}</script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+{% set p = request.path %}
+{% set details = session.get('user_details', {}) %}
+{% set display_name = details.get('fullname') or (session.get('user') or 'Guest') %}
+<div class="app">
+  <aside class="sidebar" id="main-sidebar" aria-label="Main navigation">
+    <a class="brand" href="/dashboard">{{ icon('shield') }}<span>CRACKA NIDS</span></a>
+
+    <div class="nav-group">Monitor</div>
+    <a href="/dashboard" class="nav-link {{ 'active' if p == '/dashboard' }}">{{ icon('dashboard') }}Dashboard</a>
+    <a href="/live_prediction" class="nav-link {{ 'active' if p == '/live_prediction' }}">{{ icon('live') }}Live and CSV analysis</a>
+    <a href="/manual_prediction" class="nav-link {{ 'active' if p == '/manual_prediction' }}">{{ icon('manual') }}Manual prediction</a>
+    <a href="/history_logs" class="nav-link {{ 'active' if p == '/history_logs' }}">{{ icon('history') }}History logs</a>
+
+    <div class="nav-group">Project</div>
+    <a href="/model_description" class="nav-link {{ 'active' if p == '/model_description' }}">{{ icon('model') }}Model architecture</a>
+    <a href="/overview" class="nav-link {{ 'active' if p == '/overview' }}">{{ icon('overview') }}Project overview</a>
+
+    <div class="sidebar-foot">Team CRACKA<br>Govt. Polytechnic Bhagalpur</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn" id="sidebar-toggle" aria-label="Toggle navigation">{{ icon('menu') }}</button>
+        <span class="status-pill">Models loaded</span>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" data-theme-toggle aria-label="Switch light or dark theme">
+          <span class="theme-icon-dark">{{ icon('moon') }}</span><span class="theme-icon-light">{{ icon('sun') }}</span>
+        </button>
+        <div class="profile">
+          <button class="profile-btn" id="profile-btn" aria-haspopup="true" aria-expanded="false">
+            <span class="avatar">{{ display_name[:1] | upper }}</span>
+            <span class="profile-name">{{ display_name }}</span>
+          </button>
+          <div class="menu" id="profile-menu">
+            <div class="menu-head">
+              <div class="avatar">{{ display_name[:1] | upper }}</div>
+              <strong>{{ display_name }}</strong><span>@{{ session.get('user', 'guest') }}</span>
+            </div>
+            <div class="menu-rows">
+              <div class="menu-row"><b>Email</b><span>{{ details.get('email', 'N/A') }}</span></div>
+              <div class="menu-row"><b>Phone</b><span>{{ details.get('phone', 'N/A') }}</span></div>
+              <div class="menu-row"><b>Date of birth</b><span>{{ details.get('dob', 'N/A') }}</span></div>
+              <div class="menu-row"><b>Profession</b><span>{{ details.get('profession', 'N/A') }}</span></div>
+              <div class="menu-row"><b>Gender</b><span>{{ details.get('gender', 'N/A') }}</span></div>
+            </div>
+            <a href="/logout" class="menu-logout">Log out</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      {% block content %}{% endblock %}
+      <footer class="site-footer">
+        <span>&copy; 2026 CRACKA NIDS &middot; Minor Project, Govt. Polytechnic Bhagalpur</span>
+        <nav><a href="/overview">Overview</a><a href="/model_description">Model</a><a href="/history_logs">History</a><a href="/logout">Log out</a></nav>
+      </footer>
+    </main>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

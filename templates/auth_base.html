@@ -1,0 +1,29 @@
+{% from '_icons.html' import icon %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}CRACKA NIDS{% endblock %}</title>
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||'dark'}catch(e){}</script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <button class="icon-btn auth-top" data-theme-toggle aria-label="Switch light or dark theme">
+    <span class="theme-icon-dark">{{ icon('moon') }}</span><span class="theme-icon-light">{{ icon('sun') }}</span>
+  </button>
+  <div class="auth-page">
+    <div class="auth-card {% block card_class %}{% endblock %}">
+      <div class="auth-form">
+        <h1 class="auth-title">{% block heading %}{% endblock %}</h1>
+        <p class="auth-sub">{% block subheading %}{% endblock %}</p>
+        {% if error %}<div class="notice error" role="alert">{{ error }}</div>{% endif %}
+        {% if success %}<div class="notice success" role="status">{{ success }}</div>{% endif %}
+        {% block form %}{% endblock %}
+      </div>
+      <div class="auth-side">{% block side %}{% endblock %}</div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

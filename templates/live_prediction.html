@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% from '_icons.html' import icon %}
+{% block title %}Live and CSV analysis - CRACKA NIDS{% endblock %}
+
+{% block content %}
+<div class="page-head"><div>
+  <h1 class="page-title">Live and CSV analysis</h1>
+  <p class="page-sub">Analyze a saved traffic file, or watch your own network in real time.</p>
+</div></div>
+
+<!-- Upar ka hissa CSV File Upload ke liye -->
+<div class="grid-2">
+  <div class="card">
+    <h2 class="card-title">Upload a CSV file</h2>
+    <p class="card-sub">NSL-KDD format with 41 feature columns. Extra label columns are ignored.</p>
+    <!-- Drag and drop zone jo JS se handle hoga -->
+    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Choose or drop a CSV file">
+      <div id="dz-default">{{ icon('upload') }}<div><strong>Drop a CSV here</strong></div><div class="muted" style="font-size:.88rem">or click to browse</div></div>
+      <!-- File select hone ke baad yeh dikhega -->
+      <div id="dz-selected" hidden><div id="selected-file-name" style="font-weight:600;margin-bottom:10px">file.csv</div>
+        <button type="button" class="btn btn-ghost btn-sm" id="remove-file">Remove file</button></div>
+      <input type="file" id="csv-file-input" accept=".csv,.txt" hidden>
+    </div>
+  </div>
+
+  <!-- CSV ka Batch Analysis result table -->
+  <div class="card">
+    <div class="card-head"><h2 class="card-title" style="margin:0">Batch results</h2><button class="btn btn-sm" id="run-batch-btn">Run analysis</button></div>
+    <div id="batch-summary" class="summary-row"></div>
+    <div class="table-wrap" style="max-height:340px"><table class="data-table">
+      <thead><tr><th>ID</th><th>Protocol</th><th>Prediction</th><th>Confidence</th></tr></thead>
+      <!-- JS yaha par results inject karega -->
+      <tbody id="batch-table-body"><tr><td colspan="4"><div class="empty"><strong>No results yet</strong>Choose a CSV file, then press Run analysis.</div></td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- Neeche ka hissa Live Packet Sniffing ke liye -->
+<div class="card" style="margin-top:20px">
+  <div class="card-head">
+    <div><h2 class="card-title" style="margin:0">Live network sniffing</h2>
+      <p class="card-sub" style="margin:2px 0 0">Needs admin or root rights. On Windows, install Npcap first.</p></div>
+    <button class="btn" id="start-live-btn">Start sniffing</button>
+  </div>
+  
+  <!-- Live stats aur blinking dot -->
+  <div class="live-bar"><span class="live-dot" id="live-dot"></span>
+    <span>Packets<b id="cnt-total">0</b></span><span>Threats<b id="cnt-threat" style="color:var(--danger)">0</b></span></div>
+    
+  <div class="table-wrap"><table class="data-table">
+    <thead><tr><th>ID</th><th>IP address</th><th>Protocol</th><th>Prediction</th><th>Confidence</th><th>Date</th><th>Time</th></tr></thead>
+    <!-- JS live packets yaha prepend karega -->
+    <tbody id="live-table-body"><tr><td colspan="7"><div class="empty"><strong>Not sniffing</strong>Press Start sniffing to monitor traffic. Stopping saves the session to your history.</div></td></tr></tbody>
+  </table></div>
+</div>
+{% endblock %}
+
+<!-- Page-specific JS inject kar rahe hain -->
+{% block scripts %}<script src="{{ url_for('static', filename='js/live_prediction.js') }}"></script>{% endblock %}

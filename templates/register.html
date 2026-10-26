@@ -1,0 +1,29 @@
+{% extends 'auth_base.html' %}
+{% block title %}Create account - CRACKA NIDS{% endblock %}
+{% block card_class %}wide{% endblock %}
+{% block heading %}Create your account{% endblock %}
+{% block subheading %}Takes a minute. Your date of birth is used to verify you if you reset your password.{% endblock %}
+{% block form %}
+<form method="POST" action="/register" class="form-split">
+  <div class="form-group full"><label for="fullname">Full name</label><input id="fullname" type="text" name="fullname" class="form-control" required value="{{ form.get('fullname', '') }}" placeholder="Your full name"></div>
+  <div class="form-group"><label for="username">Username</label><input id="username" type="text" name="username" class="form-control" required pattern="[A-Za-z0-9_]{3,30}" title="3-30 letters, numbers or underscores" value="{{ form.get('username', '') }}" placeholder="letters, numbers, _"></div>
+  <div class="form-group"><label for="email">Email</label><input id="email" type="email" name="email" class="form-control" required value="{{ form.get('email', '') }}" placeholder="you@example.com"></div>
+  <div class="form-group"><label for="phone">Phone</label><input id="phone" type="tel" name="phone" class="form-control" required value="{{ form.get('phone', '') }}" placeholder="10-digit number"></div>
+  <div class="form-group"><label for="dob">Date of birth</label><input id="dob" type="date" name="dob" class="form-control" required value="{{ form.get('dob', '') }}"></div>
+  <div class="form-group"><label for="profession">Profession</label><input id="profession" type="text" name="profession" class="form-control" required value="{{ form.get('profession', '') }}" placeholder="Student, engineer..."></div>
+  <div class="form-group"><label for="gender">Gender</label>
+    <select id="gender" name="gender" class="form-control" required>
+      <option value="" disabled {{ 'selected' if not form.get('gender') }}>Select</option>
+      {% for g in ['Male', 'Female', 'Other'] %}<option value="{{ g }}" {{ 'selected' if form.get('gender') == g }}>{{ g }}</option>{% endfor %}
+    </select></div>
+  <div class="form-group full"><label for="register-password">Password</label>
+    <div class="pw"><input id="register-password" type="password" name="password" class="form-control" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters">
+      <button type="button" data-toggle-password="register-password">Show</button></div></div>
+  <div class="full"><button type="submit" class="btn btn-block">Create account</button></div>
+</form>
+{% endblock %}
+{% block side %}
+<h2>Join CRACKA</h2>
+<p>Log in any time to review your saved live-sniffing sessions.</p>
+<a href="/login" class="btn">I already have an account</a>
+{% endblock %}

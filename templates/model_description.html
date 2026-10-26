@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Model architecture - CRACKA NIDS{% endblock %}
+{% block content %}
+<div class="page-head"><div>
+  <h1 class="page-title">Model architecture</h1>
+  <p class="page-sub">How the ensemble is trained, evaluated and used for predictions.</p>
+</div></div>
+
+<div class="grid-4" style="margin-bottom:20px">
+  <div class="card"><div class="stat-label">Random Forest accuracy</div><div class="stat-value" style="color:var(--ok)">{{ m.rf_acc }}%</div><div class="hint">scikit-learn, 100 trees</div></div>
+  <div class="card"><div class="stat-label">Neural network accuracy</div><div class="stat-value" style="color:var(--accent-2)">{{ m.dnn_acc }}%</div><div class="hint">TensorFlow / Keras</div></div>
+  <div class="card"><div class="stat-label">Ensemble accuracy</div><div class="stat-value">{{ (m.ens_acc ~ '%') if m.ens_acc else 'Not measured' }}</div><div class="hint">{{ 'Soft voting, same test set' if m.ens_acc else 'Re-run train_models.py to measure it' }}</div></div>
+  <div class="card"><div class="stat-label">Classes</div><div class="stat-value">5</div><div class="hint">Normal, DoS, Probe, U2R, R2L</div></div>
+</div>
+
+<div class="card" style="margin-bottom:20px">
+  <h2 class="card-title">Dataset</h2>
+  <div class="grid-4" style="margin-top:12px">
+    <div><div class="stat-label">Name</div><b>NSL-KDD</b></div>
+    <div><div class="stat-label">Training set (KDDTrain+)</div><b>{{ '{:,}'.format(m.train_size) }} records</b></div>
+    <div><div class="stat-label">Test set (KDDTest+)</div><b>{{ '{:,}'.format(m.test_size) }} records</b></div>
+    <div><div class="stat-label">Features</div><b>41, scaled with StandardScaler</b></div>
+  </div>
+  <p class="hint" style="margin-top:12px">The official train and test files are used as they come, not a random 80:20 split. KDDTest+ contains attack types the models never see in training, which is why accuracy is lower than on a random split.</p>
+</div>
+
+<div class="grid-2" style="margin-bottom:20px">
+  <div class="card">
+    <h2 class="card-title">Confusion matrices</h2>
+    <p class="card-sub">Predictions against the true class on KDDTest+.</p>
+    <div class="cm-grid">
+      <div class="cm-box">Random Forest<img src="/static/images/random_forest_cm.png" alt="Random Forest confusion matrix" onerror="this.replaceWith(document.createTextNode('Run train_models.py to create this image.'))"></div>
+      <div class="cm-box">Neural network<img src="/static/images/dnn_cm.png" alt="Neural network confusion matrix" onerror="this.replaceWith(document.createTextNode('Run train_models.py to create this image.'))"></div>
+      <div class="cm-box">Ensemble<img src="/static/images/ensemble_cm.png" alt="Ensemble confusion matrix" onerror="this.replaceWith(document.createTextNode('Run train_models.py to create this image.'))"></div>
+    </div>
+  </div>
+  <div class="card stack">
+    <div><h3 class="card-title">Encoding and scaling</h3>
+      <p class="muted" style="font-size:.9rem">The text fields <code>protocol_type</code>, <code>service</code> and <code>flag</code> become numbers with LabelEncoder. All 41 features are then standardised with StandardScaler so the neural network trains evenly. Values never seen in training fall back to a default.</p></div>
+    <div><h3 class="card-title">Attack grouping</h3>
+      <p class="muted" style="font-size:.9rem">More than 35 specific attacks are grouped into four families: DoS (for example neptune, smurf), Probe (nmap, portsweep), R2L (guess_passwd, warezclient) and U2R (buffer_overflow, rootkit).</p></div>
+    <div><h3 class="card-title">How the two models vote</h3>
+      <p class="muted" style="font-size:.9rem">Both models output a probability for each class and the two are averaged. If the combined probability of all attack classes is above 40%, the most likely attack class is reported. Otherwise the traffic is labelled Normal. The lower threshold favours catching attacks over avoiding false alarms.</p></div>
+  </div>
+</div>
+{% endblock %}

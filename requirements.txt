@@ -1,0 +1,10 @@
+flask
+werkzeug
+mysql-connector-python
+scapy
+scikit-learn
+joblib
+numpy
+pandas
+matplotlib
+tensorflow

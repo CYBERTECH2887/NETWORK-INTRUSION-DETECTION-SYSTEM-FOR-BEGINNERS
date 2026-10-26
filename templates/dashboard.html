@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - CRACKA NIDS{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-sub">A summary of everything you have saved from live sniffing sessions.</p>
+  </div>
+  <a href="/live_prediction" class="btn">Start a live session</a>
+</div>
+
+{% if stats.error %}<div class="notice error">{{ stats.error }}</div>{% endif %}
+
+<div class="grid-4" style="margin-bottom:20px">
+  <div class="card kpi"><div class="label">Packets inspected</div><div class="value">{{ stats.total }}</div></div>
+  <div class="card kpi threat"><div class="label">Threats flagged</div><div class="value">{{ stats.threats }}</div></div>
+  <div class="card kpi safe"><div class="label">Normal traffic</div><div class="value">{{ stats.normal }}</div></div>
+  <div class="card kpi"><div class="label">Saved sessions</div><div class="value">{{ stats.sessions }}</div></div>
+</div>
+
+{% if stats.total %}
+<div class="grid-2" style="margin-bottom:20px">
+  <div class="card">
+    <h2 class="card-title">Traffic breakdown</h2>
+    <p class="card-sub">Share of each class across all saved packets.</p>
+    <div class="donut-wrap">
+      <div class="donut" style="background: {{ stats.donut }}">
+        <div class="donut-center"><div><b>{{ ((stats.threats / stats.total) * 100) | round(1) }}%</b><span>threats</span></div></div>
+      </div>
+      <div class="legend">
+        {% for c in stats.by_class %}
+        <div class="legend-row" style="--k: {{ c.color }}"><i></i>{{ c.name }}<span class="n">{{ c.count }}</span><span class="p">{{ c.pct }}%</span></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h2 class="card-title">Threats by type</h2>
+    <p class="card-sub">Attack classes only, as a share of all packets.</p>
+    {% for c in stats.by_class if c.name != 'Normal' %}
+    <div class="bar-row" style="--k: {{ c.color }}"><span>{{ c.name }}</span><div class="bar"><span style="width: {{ c.pct }}%"></span></div><span>{{ c.count }}</span></div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:20px">
+  <div class="card-head"><h2 class="card-title" style="margin:0">Recent detections</h2><a href="/history_logs" class="btn btn-ghost btn-sm">View all history</a></div>
+  <div class="table-wrap"><table class="data-table">
+    <thead><tr><th>Session</th><th>IP address</th><th>Protocol</th><th>Prediction</th><th>Confidence</th><th>Time</th></tr></thead>
+    <tbody>
+      {% for r in stats.recent %}
+      <tr class="{{ 'alert-row' if r.prediction != 'Normal' }}"><td>#{{ r.session_id }}</td><td class="mono">{{ r.ip_address }}</td><td>{{ r.protocol }}</td>
+        <td><span class="chip" data-class="{{ r.prediction }}">{{ r.prediction }}</span></td><td>{{ r.confidence }}</td><td>{{ r.date }} {{ r.time }}</td></tr>
+      {% endfor %}
+    </tbody></table></div>
+</div>
+{% else %}
+<div class="card" style="margin-bottom:20px"><div class="empty"><strong>No traffic inspected yet</strong>
+  Run a live sniffing session and press Stop and save. Your results will show up here.<br><br>
+  <a href="/live_prediction" class="btn">Open live analysis</a></div></div>
+{% endif %}
+
+<div class="grid-2">
+  <div class="card">
+    <h2 class="card-title">The problem this solves</h2>
+    <ul class="list" style="margin-top:10px">
+      <li>Rule-based firewalls miss attack patterns they have not been told about.</li>
+      <li>Checking network traffic by hand is too slow once volumes grow.</li>
+      <li>A trained model can score every connection the moment it is seen.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h2 class="card-title">Attack types it detects</h2>
+    <div class="attack-list" style="margin-top:12px">
+      <div class="attack-item"><span class="chip" data-class="DoS">DoS</span>Floods a server with traffic until it stops responding.</div>
+      <div class="attack-item"><span class="chip" data-class="Probe">Probe</span>Scans a network to find open ports and weak spots.</div>
+      <div class="attack-item"><span class="chip" data-class="R2L">R2L</span>A remote attacker tries to gain access, for example by guessing passwords.</div>
+      <div class="attack-item"><span class="chip" data-class="U2R">U2R</span>A normal user tries to gain administrator (root) rights.</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

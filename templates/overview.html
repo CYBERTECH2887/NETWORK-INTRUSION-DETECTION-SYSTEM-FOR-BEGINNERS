@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Project overview - CRACKA NIDS{% endblock %}
+{% block content %}
+<div class="page-head"><div>
+  <h1 class="page-title">Project overview</h1>
+  <p class="page-sub">A Network Intrusion Detection System built as a minor project at Govt. Polytechnic Bhagalpur.</p>
+</div></div>
+
+<div class="grid-2">
+  <div class="card"><h2 class="card-title">Objective</h2>
+    <p class="muted" style="font-size:.93rem">Classify network traffic as normal or as one of four attack types using machine learning and deep learning. Models are trained on the NSL-KDD dataset, and Scapy supplies live packets for real-time checks.</p></div>
+  <div class="card"><h2 class="card-title">What is included</h2>
+    <ul class="list" style="margin-top:8px">
+      <li>Random Forest and neural network ensemble using soft voting</li>
+      <li>Manual prediction from a short form</li>
+      <li>Batch analysis of CSV traffic files</li>
+      <li>Live packet capture with sound and desktop alerts</li>
+      <li>User accounts with hashed passwords and per-user history in MySQL</li>
+    </ul></div>
+</div>
+
+<div class="section"><h2>How a packet becomes a verdict</h2>
+  <p>Every prediction path follows the same steps.</p>
+  <div class="pipeline">
+    <div class="pipe-step"><b>Capture</b>Scapy reads packets for one second, or a CSV row is read.</div>
+    <div class="pipe-step"><b>Build features</b>The 41 NSL-KDD features are filled in.</div>
+    <div class="pipe-step"><b>Encode and scale</b>Text fields become numbers, then all values are standardised.</div>
+    <div class="pipe-step"><b>Score</b>Random Forest and the neural network each give class probabilities.</div>
+    <div class="pipe-step"><b>Vote</b>Probabilities are averaged and the 40% attack threshold is applied.</div>
+    <div class="pipe-step"><b>Report</b>The result is shown, alerts fire, and sessions are saved.</div>
+  </div></div>
+
+<!-- Core System Modules Section Added -->
+<div class="section"><h2>Core system modules</h2>
+  <p>The system is divided into four major functional modules.</p>
+  <div class="grid-2" style="margin-top:15px;">
+    <div class="card">
+      <h3 class="card-title">Module 1: Preprocessing & Training</h3>
+      <p class="muted" style="font-size:.88rem">Cleans and encodes NSL-KDD data, training the Random Forest and Deep Neural Network models.</p>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Module 2: Frontend Interface</h3>
+      <p class="muted" style="font-size:.88rem">Responsive glassmorphism UI featuring dark/light modes, sound alerts, and desktop notifications.</p>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Module 3: Flask Backend</h3>
+      <p class="muted" style="font-size:.88rem">Central backend handling routing, user authentication, and the soft-voting ensemble prediction logic.</p>
+    </div>
+    <div class="card">
+      <h3 class="card-title">Module 4: DBMS & Packet Sniffing</h3>
+      <p class="muted" style="font-size:.88rem">Manages user records and logs in MySQL while Scapy sniffs live packets for real-time analysis.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section"><h2>Technology</h2>
+  <div class="grid-4">
+    <div class="card"><h3 class="card-title">Python, TensorFlow, scikit-learn</h3><p class="muted" style="font-size:.88rem">Training, preprocessing and both models.</p></div>
+    <div class="card"><h3 class="card-title">Flask</h3><p class="muted" style="font-size:.88rem">Routes, sign-in with Werkzeug hashing, and the prediction APIs.</p></div>
+    <div class="card"><h3 class="card-title">Scapy</h3><p class="muted" style="font-size:.88rem">Live packet capture and feature building.</p></div>
+    <div class="card"><h3 class="card-title">MySQL</h3><p class="muted" style="font-size:.88rem">Accounts and saved sessions.</p></div>
+  </div></div>
+
+<div class="section"><h2>Prediction classes</h2>
+  <div class="grid-3">
+    <div class="card"><span class="chip" data-class="Normal">Normal</span><p class="muted" style="margin-top:10px;font-size:.9rem">Legitimate traffic with no intrusion.</p></div>
+    <div class="card"><span class="chip" data-class="DoS">DoS</span><p class="muted" style="margin-top:10px;font-size:.9rem">Denial of service: traffic floods meant to knock a service offline.</p></div>
+    <div class="card"><span class="chip" data-class="Probe">Probe</span><p class="muted" style="margin-top:10px;font-size:.9rem">Scanning and surveillance to map open ports and services.</p></div>
+    <div class="card"><span class="chip" data-class="R2L">R2L</span><p class="muted" style="margin-top:10px;font-size:.9rem">Remote to local: an outsider tries to gain access, for example by guessing passwords.</p></div>
+    <div class="card"><span class="chip" data-class="U2R">U2R</span><p class="muted" style="margin-top:10px;font-size:.9rem">User to root: a normal account tries to gain administrator rights.</p></div>
+  </div></div>
+
+<div class="section"><h2>Team CRACKA</h2>
+  <p>5th semester, Govt. Polytechnic Bhagalpur.</p>
+  <div class="team">
+    <div class="member"><span class="avatar">S</span>Md Shad Alam</div>
+    <div class="member"><span class="avatar">S</span>Md Sufiyan Majid</div>
+    <div class="member"><span class="avatar">A</span>Anurag Kumar</div>
+    <div class="member"><span class="avatar">S</span>Md Sakir Jalal</div>
+  </div></div>
+{% endblock %}
